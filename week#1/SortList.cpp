@@ -36,14 +36,38 @@ public:
         return ans;
     }
 
-    ListNode* mergeKLists(vector<ListNode*>& lists) {
-        int k = lists.size();
-        if (k < 1)return NULL;
-        for (int i = 0; i < k - 1; i++) {
-            lists.push_back(mergeTwoLists(lists[0], lists[1]));
-            lists.erase(lists.begin(), lists.begin() + 2);
+    ListNode* midpoint(ListNode* head) {
+        if (head == NULL || head->next == NULL) {
+            return head;
         }
-        return lists.front();
+
+        ListNode* slow = head;
+        ListNode* fast = head->next;
+
+        while (fast != NULL && fast->next != NULL) {
+            fast = fast->next->next;
+            slow = slow->next;
+        }
+        return slow;
     }
 
+    ListNode* sortList(ListNode* head) {
+        if (head == NULL || head->next == NULL) {
+            return head;
+        }
+
+        ListNode* mid = midpoint(head);
+
+        ListNode* a = head;
+        ListNode* b = mid->next;
+
+        mid->next = NULL;
+
+        a = sortList(a);
+        b = sortList(b);
+
+
+        ListNode* c = mergeTwoLists(a, b);
+        return c;
+    }
 };
